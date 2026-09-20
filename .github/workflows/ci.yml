@@ -1,0 +1,45 @@
+name: ci
+# Faehrt auf jedem Push/PR genau das, was ein neuer Rechner faehrt: `bash install.sh` (kopiert, npm ci, traegt den
+# MCP ein, Selbsttest), danach Wiederholungslauf (idempotent) und Rueckbau - auf macOS, Linux und Windows (Git Bash).
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  selftest:
+    name: ${{ matrix.os }} · node ${{ matrix.node }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node: ['18', '20', '22']
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash   # unter Windows: Git Bash
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      # LF-Zusage aus /.gitattributes gegenpruefen (bash bricht an CRLF).
+      - name: Zeilenenden (LF)
+        run: |
+          if git grep -I -l $'\r' -- '*.sh' '*.js' '*.mjs' 2>/dev/null | grep .; then
+            echo "CRLF gefunden — .gitattributes greift nicht"; exit 1
+          fi
+          echo "alle LF"
+
+      # Auf dem ephemeren Runner sind ~/.ecc und ~/.claude.json leer bzw. nicht vorhanden.
+      - name: Install + Selbsttest
+        run: bash install.sh
+
+      - name: Wiederholungslauf (idempotent) + Rueckbau
+        run: |
+          bash install.sh
+          bash install.sh --uninstall
+          node -e 'const c=JSON.parse(require("fs").readFileSync(require("path").join(require("os").homedir(),".claude.json"),"utf8"));if(c.mcpServers&&c.mcpServers["ecc-memory"])process.exit(1)'
