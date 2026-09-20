@@ -1,9 +1,19 @@
-# MNEMOSYNE
+<p align="center">
+  <img src="./assets/logo.svg" alt="MNEMOSYNE — memory for Claude Code" width="100%">
+</p>
 
-**Ein lokales, repo-übergreifendes Arbeitsgedächtnis für Claude Code.**
-Claude bekommt echte Werkzeuge zum Speichern, Suchen und Abrufen von Erinnerungen — statt zu hoffen, dass es eine Index-Datei liest.
+<p align="center">
+  <b>Ein lokales, repo-übergreifendes Arbeitsgedächtnis für Claude Code.</b><br>
+  Die Titanin der Erinnerung: <i>MNEMOSYNE</i> gibt Claude echte Werkzeuge zum Speichern, Suchen und Abrufen — statt zu hoffen, dass es eine Index-Datei liest.
+</p>
 
-[![CI](https://github.com/ElisaBit-UG/mnemosyne/actions/workflows/ci.yml/badge.svg)](https://github.com/ElisaBit-UG/mnemosyne/actions/workflows/ci.yml)
+<p align="center">
+  <a href="https://github.com/ElisaBit-UG/mnemosyne/actions/workflows/ci.yml"><img src="https://github.com/ElisaBit-UG/mnemosyne/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <img src="https://img.shields.io/badge/license-MIT-39FF14?style=for-the-badge" alt="MIT">
+  <img src="https://img.shields.io/badge/node-%E2%89%A518-B6FF00?style=for-the-badge&logo=node.js&logoColor=black" alt="Node >=18">
+  <img src="https://img.shields.io/badge/MCP-stdio-00F0FF?style=for-the-badge" alt="MCP stdio">
+  <img src="https://img.shields.io/badge/Claude_Code-memory-FF2BD6?style=for-the-badge" alt="Claude Code memory">
+</p>
 
 ---
 
@@ -111,4 +121,4 @@ In einer neuen Sitzung: *„Speichere mit memory_save im Scope user die Notiz �
 ## Herkunft und Lizenz
 `scripts/` ist unverändert aus [affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code) übernommen (Stand `934195f`, 20.09.2026; Dateien `scripts/memory-mcp.mjs`, `scripts/memory.js`, `scripts/lib/{memory-vault,memory-vault-format,path-safety,missing-dependency}.js`) — MIT, © Affaan Mustafa, siehe [`LICENSE-ECC`](LICENSE-ECC). Zum Nachziehen diese sechs Dateien aus dem Upstream ersetzen und `bash install.sh` fahren; der Selbsttest zeigt, ob sich das Verhalten geändert hat.
 
-Installer, Merge-Skript, Selbsttest und CI: ElisaBit UG, MIT, siehe [`LICENSE`](LICENSE).
+Installer, Merge-Skript, Selbsttest, CI und Titelbild (`assets/genlogo.py` erzeugt `assets/logo.svg`): ElisaBit UG, MIT, siehe [`LICENSE`](LICENSE).
