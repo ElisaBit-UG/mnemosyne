@@ -1,0 +1,17 @@
+#!/bin/bash
+# .checksrc — was "gruen" fuer DIESES Repo heisst (gefahren von Cerberus' checks-run).
+set -u
+rc=0
+# JS-Syntax
+while IFS= read -r -d '' f; do node --check "$f" || { echo "JS-SYNTAX $f"; rc=1; }; done < <(git ls-files -z '*.js' '*.mjs')
+# Shell-Syntax (+ CRLF-Fruehwarnung)
+while IFS= read -r -d '' f; do
+  grep -q $'\r' "$f" && { echo "CRLF $f (autocrlf? siehe .gitattributes)"; rc=1; continue; }
+  bash -n "$f" || { echo "BASH-SYNTAX $f"; rc=1; }
+done < <(git ls-files -z '*.sh' '.checksrc')
+# Ende-zu-Ende: Installation in ein Wegwerf-Home (NICHT das echte ~/.claude.json), Selbsttest, Wiederholungslauf, Rueckbau.
+TMPH="$(mktemp -d)"; trap 'rm -rf "$TMPH"' EXIT
+if MNEMOSYNE_HOME="$TMPH" bash install.sh >/dev/null 2>&1 \
+  && MNEMOSYNE_HOME="$TMPH" bash install.sh >/dev/null 2>&1 \
+  && MNEMOSYNE_HOME="$TMPH" bash install.sh --uninstall >/dev/null 2>&1; then echo "selftest: gruen"; else echo "SELFTEST ROT"; rc=1; fi
+exit $rc

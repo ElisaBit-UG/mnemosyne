@@ -29,7 +29,7 @@ jobs:
       # LF-Zusage aus /.gitattributes gegenpruefen (bash bricht an CRLF).
       - name: Zeilenenden (LF)
         run: |
-          if git grep -I -l $'\r' -- '*.sh' '*.js' '*.mjs' 2>/dev/null | grep .; then
+          if git grep -I -l $'\r' -- '*.sh' '*.js' '*.mjs' .checksrc 2>/dev/null | grep .; then
             echo "CRLF gefunden — .gitattributes greift nicht"; exit 1
           fi
           echo "alle LF"
