@@ -19,7 +19,7 @@ const isObj = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
 let file = file0; let existed = false; let raw = '{}';
 try { file = fs.realpathSync(file0); } catch { /* neue Datei */ }          // Symlink: das ZIEL bearbeiten, den Link erhalten
 try { raw = fs.readFileSync(file, 'utf8'); existed = true; } catch (e) { if (e.code !== 'ENOENT') fail(file + ' nicht lesbar (' + e.code + ')'); }
-raw = raw.replace(/^﻿/, '');                                           // UTF-8-BOM (Windows-Editoren)
+raw = raw.replace(/^\uFEFF/, '');                                           // UTF-8-BOM (Windows-Editoren)
 let cfg; try { cfg = JSON.parse(raw.trim() === '' ? '{}' : raw); } catch (e) { fail(file + ' ist kein gueltiges JSON (' + e.message + ')'); }
 if (!isObj(cfg)) fail(file + ' enthaelt kein JSON-Objekt');
 if (cfg.mcpServers !== undefined && !isObj(cfg.mcpServers)) fail('mcpServers hat ein unerwartetes Format');

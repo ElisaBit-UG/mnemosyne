@@ -5,7 +5,8 @@
 # Beruehrt weder ~/.ecc/memory noch die echte ~/.claude.json. rc 0 = alles gruen.
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
-HD="${MNEMOSYNE_HOME:-$(node -p 'require("os").homedir().replace(/\\/g, "/")')}"
+HD="$(node -p 'require("os").homedir().replace(/\\/g, "/")')"
+[ -n "${MNEMOSYNE_HOME:-}" ] && HD="$MNEMOSYNE_HOME"
 SERVER="$HD/.ecc/memory-mcp/scripts/memory-mcp.mjs"
 T="$(mktemp -d 2>/dev/null || mktemp -d -t mnemosyne)"; trap 'rm -rf "$T"' EXIT
 # Den Test-Ordner in node's KANONISCHE Form bringen (realpath, Vorwaertsschraegstriche) - sonst rechnen bash und
