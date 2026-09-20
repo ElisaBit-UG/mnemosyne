@@ -36,8 +36,9 @@ for f in install.sh selftest.sh; do
 done
 # Zielorte so bestimmen, wie Claude Code und der Server sie selbst finden (os.homedir()). Unter Windows kann das
 # $HOME der Git Bash davon abweichen. Fuer Tests ueberschreibbar: $MNEMOSYNE_HOME.
-# (Bewusst eine eigene Zuweisung wie bei Cerberus: in "${VAR:-$(...)}" verschachtelt zerlegt Git Bash den Regex/Pfad.)
-HD="$(node -p 'require("os").homedir().replace(/\\/g, "/")')" || die "Home-Verzeichnis nicht bestimmbar"
+# Kein woertliches "/" im node-Argument: Git Bash (MSYS) haelt es fuer einen POSIX-Pfad und ersetzt es durch
+# "C:/Program Files/Git/" - heraus kaeme C:\C:\Program Files\Git\Users... Deshalb Zeichencodes (92 = \, 47 = /).
+HD="$(node -p 'require("os").homedir().split(String.fromCharCode(92)).join(String.fromCharCode(47))')" || die "Home-Verzeichnis nicht bestimmbar"
 [ -n "${MNEMOSYNE_HOME:-}" ] && HD="$MNEMOSYNE_HOME"
 DEST="$HD/.ecc/memory-mcp"
 CJ="$HD/.claude.json"

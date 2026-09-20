@@ -5,13 +5,13 @@
 # Beruehrt weder ~/.ecc/memory noch die echte ~/.claude.json. rc 0 = alles gruen.
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
-HD="$(node -p 'require("os").homedir().replace(/\\/g, "/")')"
+HD="$(node -p 'require("os").homedir().split(String.fromCharCode(92)).join(String.fromCharCode(47))')"
 [ -n "${MNEMOSYNE_HOME:-}" ] && HD="$MNEMOSYNE_HOME"
 SERVER="$HD/.ecc/memory-mcp/scripts/memory-mcp.mjs"
 T="$(mktemp -d 2>/dev/null || mktemp -d -t mnemosyne)"; trap 'rm -rf "$T"' EXIT
 # Den Test-Ordner in node's KANONISCHE Form bringen (realpath, Vorwaertsschraegstriche) - sonst rechnen bash und
 # node-auf-Windows mit verschiedenen Pfaden, und die Vault-Grenzpruefung des Servers schlaegt fehl.
-T="$(node -e 'process.stdout.write(require("fs").realpathSync(process.argv[1]).replace(/\\/g,"/"))' "$T" 2>/dev/null || printf '%s' "$T")"
+T="$(node -e 'process.stdout.write(require("fs").realpathSync(process.argv[1]).split(String.fromCharCode(92)).join(String.fromCharCode(47)))' "$T" 2>/dev/null || printf '%s' "$T")"
 PASS=0; FAIL=0
 ok()  { PASS=$((PASS + 1)); echo "  GRUEN $1"; }
 bad() { FAIL=$((FAIL + 1)); echo "  ROT   $1"; }
