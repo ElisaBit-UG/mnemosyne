@@ -58,5 +58,5 @@ const tmp = file + '.tmp-mnemosyne-' + process.pid;
 try {
   fs.writeFileSync(tmp, JSON.stringify(cfg, null, indent) + '\n', { mode: 0o600 });
   fs.renameSync(tmp, file);                                                 // atomar: nie eine halb geschriebene Konfiguration
-} catch (e) { try { fs.unlinkSync(tmp); } catch { /* egal */ } fail('Schreiben gescheitert (' + e.code + ')'); }
+} catch (e) { try { fs.unlinkSync(tmp); } catch { /* egal */ } fail('Schreiben gescheitert (' + e.message + ')'); }
 console.log('[claude-json-merge] "' + NAME + '" ' + (remove ? 'entfernt' : 'eingetragen -> ' + wanted.args[0]));
